@@ -10,14 +10,14 @@ struct MyTraits : public OpenMesh::DefaultTraits
 };
 typedef OpenMesh::PolyMesh_ArrayKernelT<MyTraits>  MyMesh;
 
-void ListDir(const std::string& dir, std::vector<std::string>& filelist, const std::string& extension)
+void ListDir(const std::string& dir, const std::string& extension, std::vector<std::string>& filelist)
 {
 	for (const auto& entry : fs::directory_iterator(dir))
 	{
 		fs::path fPath = entry.path();
 		if (fs::is_directory(fPath))
 		{
-			ListDir(fPath.string(), filelist, extension);
+			ListDir(fPath.string(), extension, filelist);
 		}
 		if (fs::is_regular_file(fPath))
 		{
@@ -35,7 +35,7 @@ void ListDir(const std::string& dir, std::vector<std::string>& filelist, const s
 int main(int argc, char** argv)
 {
 	std::vector<std::string> filelist;
-	ListDir(argv[1], filelist, ".obj");
+	ListDir(argv[1], ".obj", filelist);
 
 	std::vector<MyMesh::Point> main_points;
 	std::vector<std::vector<size_t>> main_faces;
